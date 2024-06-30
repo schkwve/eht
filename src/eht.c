@@ -45,3 +45,23 @@ void eht_delete_hashtable(eht_hashtable *table)
 	free(table->items);
 	free(table);
 }
+
+int eht_get_hash(const char *s, const int num_buckets, const int attempt)
+{
+	const int hash_a = eht_hash(s, EHT_PRIME_1, num_buckets);
+	const int hash_b = eht_hash(s, EHT_PRIME_2, num_buckets - 1);
+	return (hash_a + (attempt * (hash_b + 1))) % num_buckets;
+}
+
+int eht_hash(const char *s, const int a, const int m)
+{
+	const int len_s = strlen(s);
+	long hash = 0;
+
+	for (int i = 0; i < len_s; i++) {
+		hash += (long)pow(a, len_s - (i+1)) * s[i];
+		hash = hash % m;
+	}
+
+	return (int)hash;
+}
