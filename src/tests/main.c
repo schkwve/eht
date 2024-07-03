@@ -3,7 +3,8 @@
 
 int main(int argc, char **argv)
 {
-	eht_hashtable *table = eht_new_hashtable();
-	eht_delete_hashtable(table);
+	eht_hashtable *table = eht_new_table();
+
+	eht_delete_table(table);
 	return 0;
 }
