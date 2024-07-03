@@ -127,7 +127,7 @@ void eht_delete_table(eht_hashtable *table)
 {
 	for (int i = 0; i < table->size; i++) {
 		eht_item *item = table->items[i];
-		if (item != NULL) {
+		if (item != NULL && item != &EHT_DELETED_ITEM) {
 			eht_delete_item(item);
 		}
 	}
@@ -240,15 +240,14 @@ void eht_remove(eht_hashtable *table, const char *key)
 			if (strcmp(item->key, key) == 0) {
 				eht_delete_item(item);
 				table->items[index] = &EHT_DELETED_ITEM;
-				break;
+				table->count--;
+				return;
 			}
 		}
 
 		index = eht_get_hash(item->key, table->size, i);
 		item = table->items[index];
 	}
-
-	table->count--;
 }
 
 /**
